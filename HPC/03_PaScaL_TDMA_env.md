@@ -39,10 +39,29 @@ module add xccels_lib/superlu_dist_8.1.2
 
 alias interactive='qsub -I -l select=1:ncpus=68:mpiprocs=68:ompthreads=1 -l walltime=4:00:00 -q debug -A etc'
 ###
+source .bash_rc
+
 
 # Check 
 module list
 ```
 
 * We should submit any job and `interactive` alias in `scratch/USERID`.
-  
+
+## Examples
+```shell
+cds # cd scratch/$USERID
+cd ~/examples
+
+# Example: pddrive2.out
+mpiicc -I$INC_SUPERLUD -L$LIB_SUPERLUD -lsuperlu_dist dreadhb.c dcreate_matrix.c dcreate_matrix_perturbed.c pddrive2.c -o pddrive2.out
+
+# Example: test.out
+mpiicc -I$INC_SUPERLUD -L$LIB_SUPERLUD -lsuperlu_dist dreadhb.c dcreate_matrix.c dcreate_matrix_perturbed.c test.c -o test.out
+
+# Example: pddrive2.out with MKL_parallel link 
+mpiicc -I$INC_SUPERLUD -L$LIB_SUPERLUD -lsuperlu_dist -L/apps/compiler/intel/oneapi_21.2/mkl/2021.2.0/lib/intel64/ -mkl=parallel dreadhb.c dcreate_matrix.c dcreate_matrix_perturbed.c pddrive2.c -o pddrive2.out
+
+# Test exampels
+mpirun -np 4 ./OUTFILENAME.out -r 2 -c 2 tdm 16_new.rua 
+```

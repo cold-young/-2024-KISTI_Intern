@@ -15,7 +15,7 @@
 2. SKL (CPU-only) node
   - Intel Xeon Gold 6148 (Skylake)
 
-### 파일 송수신
+### Send & Receive Files
 - FTP Client 
 ```shell
 ftp nurion-dm.ksc.re.kr
@@ -29,8 +29,14 @@ isam
 ```
 
 ### File system & quater policy
-- Provide two file systems, `/home01/$USER` and `/scratch/$USER`(`cds`).
+- Provide two file systems, `/home01/$USER` and `/scratch/$USER`(`$ cds`).
 - Performance of Home directory is limited. We should use scratch directory when use any computation..
+- `/home01/$USER`: 64GB 
+- `/scratch/$USER`: 100TB / Delete files have not been used for 15 days
+
+```shell
+lfs quota -h /home01 # check file system disk
+```
 
 ## How to set module & compiler
 1. **Compiler & modulus Setting**
