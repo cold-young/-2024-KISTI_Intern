@@ -1,4 +1,4 @@
-# NURION Tutorial - Submit job / Interactive job (KOR.)
+# HPC Job Tutorials (KOR.)
 **Date**: 2024.05.21 (Tue) <br>
 **Writer**: Chanyoung Ahn ([cold-young](https://github.com/cold-young))
 
@@ -49,8 +49,8 @@ mpirun ./hello.x
 ## Send/Download files 
 
 ```shell
-sftp [USER_ID]@nurion-dm.ksc.ke.kr # Nurion
-sftp [USER_ID]@neuron-dm.ksc.ke.kr # neuron
+sftp [USER_ID]@nurion-dm.ksc.re.kr # Nurion
+sftp [USER_ID]@neuron-dm.ksc.re.kr # neuron
 
 # OTP PW: application
 # PW: USER_ID PW
