@@ -1,11 +1,12 @@
-name: Lint
+name: Python Formatting
 
 on: [push, pull_request]
 
 jobs:
-  runs-on: ubuntu-latest
+  build:
+    runs-on: ubuntu-latest
 
-  steps:
+    steps:
     - uses: actions/checkout@v3
     - name: Set up Python 3.11
       uses: actions/setup-python@v3
