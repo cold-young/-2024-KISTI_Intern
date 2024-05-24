@@ -28,7 +28,8 @@ intel/oneapi_21.2 impi/oneapi_21.2 \
 xccels_lib/MUMPS_5.6.2 xccels_lib/STRUMPACK_7.1.4 \
 xccels_lib/superlu_dist_8.1.2 
 
-# .. Or Add these commands in .bash_rc
+# .. Or Add these commands in .bashrc
+# vim .bashrc
 module add craype-mic-knl
 module add intel/oneapi_21.2
 module add impi/oneapi_21.2

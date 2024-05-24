@@ -3,7 +3,7 @@
 # 24.05.23
 
 # Command Example:
-# $ python matrix_visualizer.py --name=tdm16_example.rua
+# $ python matrix_visualizer.py --name=tdm16_example.rua --number=True
 
 import argparse
 import os
