@@ -26,8 +26,10 @@ python matrix_visualizer.py --name=${FILE_NAME.rua} --path=${PATH} --number=True
 - `name`: Name of matrix file. Default is `tdm16_example.rua`. (i.e., `--name=tdm16_example.rua`)
 - `number`: Default is `False` (i.e., `--number=True`)
 
+### Result
 <img src="../../img/HPC_util_01.png" height=300>
-<img src="../../img/HPC_util_02.png" height=300>
+
+<!-- <img src="../../img/HPC_util_02.png" height=300>
 
 ## Test matrix w/ superlu_dist (experimental)
 ### 16 dim
@@ -37,5 +39,5 @@ python matrix_visualizer.py --name=${FILE_NAME.rua} --path=${PATH} --number=True
 <img src="../../img/240524_superlu_20dim.png" height=500>
 
 ### 1000 dim
-<img src="../../img/240524_superlu_1000dim.png" height=300>
+<img src="../../img/240524_superlu_1000dim.png" height=300> -->
 

@@ -73,32 +73,64 @@ def parse_harwell_boeing(file_path):
     for line in index_lines:
         indices.extend([int(val.strip()) for val in line.split() if val.strip()])
 
-    # Parse values
-    values = []
+    # Parse A_matrix
+    A_matrix = []
     value_lines = lines[5 + ptrcrd + indcrd : 5 + ptrcrd + indcrd + valcrd]
+
+    # Parse b_matrix
+    b_matrix = []
+    b_lines = lines[5 + ptrcrd + indcrd + valcrd :]
+
     # Fixed format: 5E15.8 means each value has a width of 15 characters
+    # generate_matrix.py 95, 98 row
     value_width = 15
+
     for line in value_lines:
         for i in range(0, len(line), value_width):
             segment = line[i : i + value_width].strip()
             if segment:  # Ensure no empty strings are processed
-                values.append(float(segment))
+                A_matrix.append(float(segment))
 
-    return nrow, ncol, pointers, indices, values
+    for line in b_lines:
+        for i in range(0, len(line), value_width):
+            segment = line[i : i + value_width].strip()
+            if segment:  # Ensure no empty strings are processed
+                b_matrix.append(float(segment))
+
+    return nrow, ncol, pointers, indices, A_matrix, b_matrix
 
 
-def create_matrix(nrow, ncol, pointers, indices, values):
+def create_matrix(nrow, ncol, pointers, indices, A_matrix, b_matrix):
     A = np.zeros((nrow, ncol))
+    b = np.zeros((nrow, 1))
+
     for j in range(ncol):
         for idx in range(pointers[j] - 1, pointers[j + 1] - 1):
             i = indices[idx] - 1
-            A[i, j] = values[idx]
-    return A
+            A[i, j] = A_matrix[idx]
+        b[j] = b_matrix[j]
+    return A, b
 
 
-def visualize_matrix(A):
-    fig, ax = plt.subplots()
-    cax = ax.matshow(A, cmap="viridis")
+def visualize_matrix(A, b):
+    # fig, (ax, bx) = plt.subplots(1, 2, figsize=(16, 6), gridspec_kw={'wspace': 0.001})
+    fig, (ax, bx, cax) = plt.subplots(
+        1, 3, figsize=(10, 6), gridspec_kw={"width_ratios": [1, 0.05, 0.05]}
+    )
+    plt.suptitle(f"Matrix Visualization: {args_cli.name}", fontsize=12)
+
+    ##### PLOT 1 #####
+    cim = ax.matshow(A, cmap="viridis", vmin=-10, vmax=10)
+    ax.text(
+        0.5,
+        -0.05,
+        "A Matrix",
+        fontsize=10,
+        horizontalalignment="center",
+        verticalalignment="center",
+        transform=ax.transAxes,
+    )
+
     if args_cli.number == "True":
         for (i, j), val in np.ndenumerate(A):
             if A[i, j] != 0:
@@ -113,13 +145,40 @@ def visualize_matrix(A):
                     weight="bold",
                 )
 
-    plt.colorbar(cax)
-    plt.title(f"Matrix Visualization: {args_cli.name}")
+    ##### PLOT 2 #####
+    bx.text(
+        0.5,
+        -0.05,
+        "b Matrix",
+        fontsize=10,
+        horizontalalignment="center",
+        verticalalignment="center",
+        transform=bx.transAxes,
+    )
+
+    cbx = bx.matshow(b, cmap="viridis", vmin=-10, vmax=10)
+    bx.xaxis.set_visible(False)
+    if args_cli.number == "True":
+        for (i, j), val in np.ndenumerate(b):
+            if b[i, j] != 0:
+                bx.text(
+                    j,
+                    i,
+                    f"{val:.1f}",
+                    ha="center",
+                    va="center",
+                    color="red",
+                    size=6,
+                    weight="bold",
+                )
+
+    # plt.colorbar(cbx)
+    plt.colorbar(cbx, cax=cax)
     plt.show()
 
 
 ##
 file_path = os.path.join(args_cli.path, args_cli.name)
-nrow, ncol, pointers, indices, values = parse_harwell_boeing(file_path)
-A = create_matrix(nrow, ncol, pointers, indices, values)
-visualize_matrix(A)
+nrow, ncol, pointers, indices, A_matrix, b_matrix = parse_harwell_boeing(file_path)
+A, b = create_matrix(nrow, ncol, pointers, indices, A_matrix, b_matrix)
+visualize_matrix(A, b)

@@ -7,6 +7,7 @@
 
 # Command Example:
 # $ python generate_matrix.py --dim=20
+# TODO: Randomization A matrix
 
 import argparse
 import os
@@ -14,6 +15,7 @@ import datetime as dt
 
 import numpy as np
 import math
+import random
 
 current_directory = os.path.dirname(os.path.abspath(__file__))
 default_path = os.path.join(current_directory, "matrix_data")
@@ -24,22 +26,33 @@ parser.add_argument("--path", type=str, default=default_path, help="Path of .rua
 parser.add_argument(
     "--name", type=str, default="random", help="a name of generated rua file"
 )
+parser.add_argument("--view", type=str, default="False", help="View matrix file")
 args_cli = parser.parse_args()
 
 lines = []
+size = args_cli.dim
 
+### element of b matrix ###
+rhs = np.zeros(args_cli.dim, "double")
+# rhs[0] = 1
+# for i in range(1, size - 1):
+#     rhs[i] = 0
+# rhs[size - 1] = 5
+
+for i in range(size):
+    rhs[i] = random.randint(-10, 10)
+###########################
+
+## Diagonal element of A matrix ##
 a_diag = 2.0
 a_lower = -1.0
 a_upper = -1.0
-
-size = args_cli.dim
+##################################
 
 col_ptr = np.zeros(args_cli.dim + 1, "int32")
 col_ptr[0] = 1
-
 for i in range(1, size):
     col_ptr[i] = 3 * i
-
 col_ptr[size] = col_ptr[size - 1] + 2
 
 nnz = size * 3 - 2
@@ -67,25 +80,24 @@ row_ind[nnz - 1] = size
 val[nnz - 2] = -1
 val[nnz - 1] = 2
 
-rhs = np.zeros(args_cli.dim, "double")
-rhs[0] = 1
-for i in range(1, size - 1):
-    rhs[i] = 0
-rhs[size - 1] = 5
-
 # Line 1:
 # TITLE, (72 characters)
 # KEY, (8 characters)
-print("{0:72}{1:8}".format("Tridiagonal matirx", "tdm"))
-lines.append("{0:72}{1:8}".format("Tridiagonal matirx", "tdm"))
-PTRFMT_width = 3
-PTRFMT_count = args_cli.dim + 1  #
-INDFMT_width = 3
+Line1 = "{0:72}{1:8}".format("Tridiagonal matirx", "tdm")
+lines.append(Line1)
+
+if args_cli.view == "True":
+    print(Line1)
+
+PTRFMT_width = len(str(col_ptr[-1])) + 1
+PTRFMT_count = 26
+INDFMT_width = len(str(row_ind[-1])) + 1
 INDFMT_count = 26
-VALFMT_width = 15  #
+
+VALFMT_width = 15
 VALFMT_precs = 8
 VALFMT_count = 5
-RHSFMT_width = 15  #
+RHSFMT_width = 15
 RHSFMT_precs = 8
 RHSFMT_count = 5
 
@@ -101,12 +113,13 @@ TOTCRD = PTRCRD + INDCRD + VALCRD + RHSCRD
 # INDCRD, integer, number of data lines for row or variable indices, (14 characters)
 # VALCRD, integer, number of data lines for numerical values of matrix entries, (14 characters)
 # RHSCRD, integer, number of data lines for right hand side vectors, starting guesses, and solutions, (14 characters)
-print(
-    "{0:14d}{1:14d}{2:14d}{3:14d}{4:14d}".format(TOTCRD, PTRCRD, INDCRD, VALCRD, RHSCRD)
+Line2 = "{0:14d}{1:14d}{2:14d}{3:14d}{4:14d}".format(
+    TOTCRD, PTRCRD, INDCRD, VALCRD, RHSCRD
 )
-lines.append(
-    "{0:14d}{1:14d}{2:14d}{3:14d}{4:14d}".format(TOTCRD, PTRCRD, INDCRD, VALCRD, RHSCRD)
-)
+lines.append(Line2)
+
+if args_cli.view == "True":
+    print(Line2)
 
 # Line 3:
 # MXTYPE, matrix type (see table), (3 characters)
@@ -115,93 +128,74 @@ lines.append(
 # NCOL, integer, number of columns or elements, (14 characters)
 # NNZERO, integer, number of row or variable indices. For "assembled" matrices, this is just the number of nonzero entries. (14 characters)
 # NELTVL, integer, number of elemental matrix entries. For "assembled" matrices, this is 0. (14 characters)
-print("{0:3s}{1:11}{2:14d}{3:14d}{4:14d}{5:14d}".format("RUA", "", size, size, nnz, 0))
-lines.append(
-    "{0:3s}{1:11}{2:14d}{3:14d}{4:14d}{5:14d}".format("RUA", "", size, size, nnz, 0)
-)
+Line3 = "{0:3s}{1:11}{2:14d}{3:14d}{4:14d}{5:14d}".format("RUA", "", size, size, nnz, 0)
+lines.append(Line3)
+
+if args_cli.view == "True":
+    print(Line3)
 
 # Line 4:
 # PTRFMT, FORTRAN I/O format for pointers, (16 characters)
 # INDFMT, FORTRAN I/O format for row or variable indices, (16 characters)
 # VALFMT, FORTRAN I/O format for matrix entries, (20 characters)
 # RHSFMT, FORTRAN I/O format for right hand sides, initial guesses, and solutions, (20 characters)
-print(
-    "({1}I{2}){0:10}({3}I{4}){0:10}({5}E{6}.{7}){0:12}({5}E{6}.{7})".format(
-        "",
-        PTRFMT_count,
-        PTRFMT_width,
-        INDFMT_count,
-        INDFMT_width,
-        VALFMT_count,
-        VALFMT_width,
-        VALFMT_precs,
-        RHSFMT_count,
-        RHSFMT_width,
-        RHSFMT_precs,
-    )
-)
-lines.append(
-    "({1}I{2}){0:10}({3}I{4}){0:10}({5}E{6}.{7}){0:12}({5}E{6}.{7}){0:12}".format(
-        "",
-        PTRFMT_count,
-        PTRFMT_width,
-        INDFMT_count,
-        INDFMT_width,
-        VALFMT_count,
-        VALFMT_width,
-        VALFMT_precs,
-        RHSFMT_count,
-        RHSFMT_width,
-        RHSFMT_precs,
-    )
-)
+ptrfmt_str = f"({PTRFMT_count}I{PTRFMT_width})"
+indfmt_str = f"({INDFMT_count}I{INDFMT_width})"
+valfmt_str = f"({VALFMT_count}E{VALFMT_width}.{VALFMT_precs})"
+rhsfmt_str = f"({RHSFMT_count}E{RHSFMT_width}.{RHSFMT_precs})"
 
-# Line 5: (only present if 0 < RHSCRD!)
-# RHSTYP, describes the right hand side information, (3 characters)
-# blank space, (11 characters)
-# NRHS, integer, the number of right hand sides, (14 characters)
-# NRHSIX, integer, number of row indices, (14 characters)
-print("{0:3s}{1:11}{2:14d}{3:14d}".format("F", "", 1, 0))
-lines.append("{0:3s}{1:11}{2:14d}{3:14d}".format("F", "", 1, 0))
+Line4 = "{0:16s}{1:16s}{2:20s}{3:20s}".format(
+    ptrfmt_str, indfmt_str, valfmt_str, rhsfmt_str
+)
+lines.append(Line4)
 
-# lines.append("{0:3s}{1:11}{2:14d}{3:14d}{4:14d}{5:14d}".format("RUA", "", size, size, nnz, 0))
+if args_cli.view == "True":
+    print(Line4)
+
+# Line 5:
+Line5 = "{0:3s}{1:11}{2:14d}{3:14d}".format("F", "", 1, 0)
+lines.append(Line5)
+
+if args_cli.view == "True":
+    print(Line5)
+
+# 6 row
 tmp = ""
 for i in range(size + 1):
-    # from IPython import embed; embed(); exit()
-    empty = len(str(col_ptr[i])) + 1
-    print("{0:{1}}".format(col_ptr[i], empty), end="")
-    tmp += "{0:{1}}".format(col_ptr[i], empty)
+    tmp += "{0:{1}}".format(col_ptr[i], PTRFMT_width)
     if ((i + 1) % PTRFMT_count == 0) or (i == size):
-        print("")
         lines.append(tmp)
+        if args_cli.view == "True":
+            print(tmp)
         tmp = ""
 
+# 7 row
 tmp = ""
 for i in range(nnz):
-    empty = len(str(row_ind[i])) + 1
-    print("{0:{1}}".format(row_ind[i], empty), end="")
-    tmp += "{0:{1}}".format(row_ind[i], empty)
+    tmp += "{0:{1}}".format(row_ind[i], INDFMT_width)
     if ((i + 1) % INDFMT_count == 0) or (i == nnz - 1):
-        print("")
         lines.append(tmp)
+        if args_cli.view == "True":
+            print(tmp)
         tmp = ""
+
 
 tmp = ""
 for i in range(nnz):
-    print("{0:15.8e}".format(val[i]), end="")
     tmp += "{0:15.8e}".format(val[i])
     if ((i + 1) % VALFMT_count == 0) or (i == nnz - 1):
-        print("")
         lines.append(tmp)
+        if args_cli.view == "True":
+            print(tmp)
         tmp = ""
 
 tmp = ""
 for i in range(size):
-    print("{0:15.8e}".format(rhs[i]), end="")
     tmp += "{0:15.8e}".format(rhs[i])
     if ((i + 1) % RHSFMT_count == 0) or (i == size - 1):
-        print("")
         lines.append(tmp)
+        if args_cli.view == "True":
+            print(tmp)
         tmp = ""
 
 if args_cli.name == "random":
@@ -214,3 +208,5 @@ file_path = os.path.join(args_cli.path, name)
 with open(f"{file_path}", "w") as f:
     for line in lines:
         f.write(line + "\n")
+
+print("Generated Matrix!")
