@@ -66,3 +66,5 @@ mpiicc -I$INC_SUPERLUD -L$LIB_SUPERLUD -lsuperlu_dist -L/apps/compiler/intel/one
 # Test exampels
 mpirun -np 4 ./OUTFILENAME.out -r 2 -c 2 tdm 16_new.rua 
 ```
+
+### [Makefile Tutorial](../C_lang/Makefile.md)
