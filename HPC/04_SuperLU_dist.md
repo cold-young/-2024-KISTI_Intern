@@ -13,52 +13,55 @@ ___
     <!-- <img src="../img/HPC_02_HB_Format.png" height=200><br> -->
 
 ### **`16tdm_matrix.rua`**
-
-{ % highlight python linenos % }
 ```python
-Tridiagonal matirx                                                      tdm     
-            17             1             2            10             4
-#       # of data lines  # of colum line
-RUA                       16            16            46             0
-(26I3)          (26I3)          (5E15.8)            (5E15.8)            
-F                          1             0
-  1  3  6  9 12 15 18 21 24 27 30 33 36 39 42 45 47
-  1  2  1  2  3  2  3  4  3  4  5  4  5  6  5  6  7  6  7  8  7  8  9  8  9 10
-  9 10 11 10 11 12 11 12 13 12 13 14 13 14 15 14 15 16 15 16
- 2.00000000e+00-1.00000000e+00-1.00000000e+00 2.00000000e+00-1.00000000e+00
--1.00000000e+00 2.00000000e+00-1.00000000e+00-1.00000000e+00 2.00000000e+00
+1:Tridiagonal matirx                                                      tdm     
+2:            17             1             2            10             4
+#    # of data lines  # of 행 누적 nnz #nnz 열 idx  # of A marix lines # of b matrix lines
+3:RUA                       16            16            46             0
+#                     # row           # column    # nnz 수
+4:(26I3)          (26I3)          (5E15.8)            (5E15.8)            
+5:F                          1             0
+6:  1  3  6  9 12 15 18 21 24 27 30 33 36 39 42 45 47
+7:  1  2  1  2  3  2  3  4  3  4  5  4  5  6  5  6  7  6  7  8  7  8  9  8  9 10
+8:  9 10 11 10 11 12 11 12 13 12 13 14 13 14 15 14 15 16 15 16
+9: 2.00000000e+00-1.00000000e+00-1.00000000e+00 2.00000000e+00-1.00000000e+00
+10:-1.00000000e+00 2.00000000e+00-1.00000000e+00-1.00000000e+00 2.00000000e+00
 ...
--1.00000000e+00 2.00000000e+00-1.00000000e+00-1.00000000e+00 2.00000000e+00
- 2.00000000e+00
- 2.00000000e+00 6.00000000e+00-9.00000000e+00 4.00000000e+00-9.00000000e+00
+17:-1.00000000e+00 2.00000000e+00-1.00000000e+00-1.00000000e+00 2.00000000e+00
+18: 2.00000000e+00
+19: 2.00000000e+00 6.00000000e+00-9.00000000e+00 4.00000000e+00-9.00000000e+00
 ...
+22: 9.00000000e+00
 ```
-{ % endhighlight % }
 
-- Line 1: Title / KEY
-- Line 2: 
-  - Total number of data lines: `17`
-  - Number of data lines for pointers: `1`
-  - Number of data lines for row or variable indices: `2`
-  - Number of data lines for numerical values of matrix entries: `10`
-  - **PHSCRD** Number of data lines for right hand side vectors, starting guesses, and solutions: `4`
-- Line 3: 
+- **Line 1**: Title / KEY
+- **Line 2**: 
+  - Total number of data lines: `17` (5 - 22 rows: 17 lines)
+  - Number of data lines for pointers: `1` (6 row: 1 line) 
+  - Number of data lines for row or variable indices: `2` (7-8 row: 2 lines)
+  - Number of data lines for numerical values of matrix entries: `10` (9-18 row: 10 lines)
+  - **PHSCRD** Number of data lines for right hand side vectors, starting guesses, and solutions: `4` (19-22 row: 4 lines)
+- **Line 3**: 
   - MATRIX TYPE: `RUA`(real, unsymmetric + square, assembled)
-  - number of rows or variable: `16`
+  - number of rows or variable: `16` 
   - number of columns or variable: `16`
-  - number of nonzero entires: `46`
+  - number of nonzero entires: `46` (the number of elements in 7-8 row)
   - number of elemental matrix entries, "assembled":0 `0`
-- Line 4:
-  - Fortran format ...
-- Line 5 (PHSCRD>0):
+- **Line 4**:
+  - (26I3): line break when write 26 element. each element has 3 space. (6 row) / the accumulate number of row nnz
+  - (26I3): line break when write 26 element. each element has 3 space. (7-8 row) / nnz colmn idx
+  - (5E15.8): line break when write 5 element. each element has 15 space. (9-18 row) / A matrix
+  - (5E15.8): line break when write 5 element. each element has 15 space. (19-22 row) / b matrix 
+
+- **Line 5** (PHSCRD>0):
   - describes the right hand side information: `F`  우변 정보 (전체)
   - the number of right hand side: `1`
   - number of row indices: `0`
 
 - 6 row: point data / 행렬 항목의 시작 위치
 - 7-8 row: index data / 각 항목에 해당되는 행의 인덱스
-- 9-18 row: 값 데이터
-- 19-22 row: 우변 데이터
+- 9-18 row: A matrix
+- 19-22 row: b matrix
 ## Examples
 
 ```shell
