@@ -10,7 +10,30 @@ ___
 - **Reference:** [Link](https://people.sc.fsu.edu/~jburkardt/data/hb/hb.html)
 - It is common to use the same compressed column storage to represent the matrix in memory.
 
-    <img src="../img/HPC_02_HB_Format.png" height=200><br>
+    <!-- <img src="../img/HPC_02_HB_Format.png" height=200><br> -->
+
+### **`16tdm_matrix.rua`**
+
+{ % highlight python linenos % }
+```python
+Tridiagonal matirx                                                      tdm     
+            17             1             2            10             4
+#       # of data lines  # of colum line
+RUA                       16            16            46             0
+(26I3)          (26I3)          (5E15.8)            (5E15.8)            
+F                          1             0
+  1  3  6  9 12 15 18 21 24 27 30 33 36 39 42 45 47
+  1  2  1  2  3  2  3  4  3  4  5  4  5  6  5  6  7  6  7  8  7  8  9  8  9 10
+  9 10 11 10 11 12 11 12 13 12 13 14 13 14 15 14 15 16 15 16
+ 2.00000000e+00-1.00000000e+00-1.00000000e+00 2.00000000e+00-1.00000000e+00
+-1.00000000e+00 2.00000000e+00-1.00000000e+00-1.00000000e+00 2.00000000e+00
+...
+-1.00000000e+00 2.00000000e+00-1.00000000e+00-1.00000000e+00 2.00000000e+00
+ 2.00000000e+00
+ 2.00000000e+00 6.00000000e+00-9.00000000e+00 4.00000000e+00-9.00000000e+00
+...
+```
+{ % endhighlight % }
 
 - Line 1: Title / KEY
 - Line 2: 
@@ -68,3 +91,28 @@ mpirun -np 4 ./OUTFILENAME.out -r 2 -c 2 tdm 16_new.rua
   
 ### `pddrive2.c` and `test.c`
 * These examples illustrate how to use PDGSSVX to solve systems repeatedly w/ the same sparsity pattern of matrix A.
+
+## `test.c`: SuperLU-dist Benchmark 
+* [Code Documentation](https://portal.nersc.gov/project/sparse/superlu/superlu_dist_code_html/index.html)
+* Add Debug part in `pddrive2.c`
+```cpp
+    for(ii=0;ii<4;ii++) {
+        printf("iam = %3d, x[%2d] = %15.10f\n", iam, ii, b[ii]);
+        printf("iam = %d, A.nnz_loc = %d\n", iam, Astore_temp->nnz_loc);
+        printf("iam = %d, A.fst_row = %d\n", iam, Astore_temp->fst_row);
+        printf("iam = %d, A.m_loc = %d\n", iam, Astore_temp->m_loc);
+    }
+```
+
+
+```cpp
+// pdgssvx Function
+pdgssvx(&options, &A, &ScalePermstruct, b, ldb, nrhs, &grid,
+            &LUstruct, &SOLVEstruct, berr, &stat, &info);
+
+```
+- [**Reference**](https://portal.nersc.gov/project/sparse/superlu/superlu_dist_code_html/pdgssvx_8c.html)
+- `pdgssvx` solves a system of linear equations $A \times X = B$, by using Gaussian elimination with "static pivoting" to compute the LU factorization of A.
+  
+<img src="../img/HPC_util_03.png" height=200>
+

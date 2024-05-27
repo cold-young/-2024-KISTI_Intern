@@ -62,9 +62,13 @@ mpiicc -I$INC_SUPERLUD -L$LIB_SUPERLUD -lsuperlu_dist dreadhb.c dcreate_matrix.c
 
 # Example: pddrive2.out with MKL_parallel link 
 mpiicc -I$INC_SUPERLUD -L$LIB_SUPERLUD -lsuperlu_dist -L/apps/compiler/intel/oneapi_21.2/mkl/2021.2.0/lib/intel64/ -mkl=parallel dreadhb.c dcreate_matrix.c dcreate_matrix_perturbed.c pddrive2.c -o pddrive2.out
+```
 
+```shell
 # Test exampels
 mpirun -np 4 ./OUTFILENAME.out -r 2 -c 2 tdm 16_new.rua 
 ```
-
+- `-np`: the number of processors  
+- `-r`: the number of processor grid row
+- `-c`: the number of processor grid column 
 ### [Makefile Tutorial](../C_lang/Makefile.md)

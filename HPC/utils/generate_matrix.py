@@ -3,10 +3,10 @@
 
 # Update for saving .rua file and changing dimension
 # Chanyoung Ahn (https://github.com/cold-young)
-# 24.05.23
+# 24.05.27
 
 # Command Example:
-# $ python generate_matrix.py --dim=20
+# $ python generate_matrix.py --dim=20 --random=True
 # TODO: Randomization A matrix
 
 import argparse
@@ -27,6 +27,7 @@ parser.add_argument(
     "--name", type=str, default="random", help="a name of generated rua file"
 )
 parser.add_argument("--view", type=str, default="False", help="View matrix file")
+parser.add_argument("--random", type=str, default="False", help="b matrix randomization True/False. Default is False.")
 args_cli = parser.parse_args()
 
 lines = []
@@ -34,13 +35,14 @@ size = args_cli.dim
 
 ### element of b matrix ###
 rhs = np.zeros(args_cli.dim, "double")
-# rhs[0] = 1
-# for i in range(1, size - 1):
-#     rhs[i] = 0
-# rhs[size - 1] = 5
-
-for i in range(size):
-    rhs[i] = random.randint(-10, 10)
+if args_cli.random == "False":
+    rhs[0] = 1
+    for i in range(1, size - 1):
+        rhs[i] = 0
+    rhs[size - 1] = 5
+else:
+    for i in range(size):
+        rhs[i] = random.randint(-10, 10)
 ###########################
 
 ## Diagonal element of A matrix ##
@@ -90,9 +92,9 @@ if args_cli.view == "True":
     print(Line1)
 
 PTRFMT_width = len(str(col_ptr[-1])) + 1
-PTRFMT_count = 26
+PTRFMT_count = 80 // PTRFMT_width
 INDFMT_width = len(str(row_ind[-1])) + 1
-INDFMT_count = 26
+INDFMT_count = 80 // INDFMT_width
 
 VALFMT_width = 15
 VALFMT_precs = 8
