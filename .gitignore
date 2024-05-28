@@ -16,3 +16,4 @@
 # develop
 **/develop/
 **/*.rua
+**/*.csv

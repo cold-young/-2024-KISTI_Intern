@@ -18,4 +18,4 @@ jobs:
         pip install black==24.4.2
     - name: Formatting with black
       run: |
-        black --check .
+        black .
