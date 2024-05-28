@@ -122,7 +122,7 @@ def visualize_matrix(A, b):
     ##### PLOT 1 #####
     # cim = ax.matshow(A, cmap="viridis", vmin=-10, vmax=10)
     cim = ax.imshow(A, cmap="viridis", vmin=-10, vmax=10)
-    
+
     ax.text(
         0.5,
         -0.05,
@@ -159,10 +159,10 @@ def visualize_matrix(A, b):
     )
 
     # cbx = bx.matshow(b, cmap="viridis", vmin=-10, vmax=10)
-    cbx = bx.imshow(b, cmap="viridis", vmin=-10, vmax=10, aspect='auto')
-    
+    cbx = bx.imshow(b, cmap="viridis", vmin=-10, vmax=10, aspect="auto")
+
     bx.xaxis.set_visible(False)
-    bx.set_xlim(0, 0.1) 
+    bx.set_xlim(0, 0.1)
     if args_cli.number == "True":
         for (i, j), val in np.ndenumerate(b):
             if b[i, j] != 0:

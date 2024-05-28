@@ -27,7 +27,12 @@ parser.add_argument(
     "--name", type=str, default="random", help="a name of generated rua file"
 )
 parser.add_argument("--view", type=str, default="False", help="View matrix file")
-parser.add_argument("--random", type=str, default="False", help="b matrix randomization True/False. Default is False.")
+parser.add_argument(
+    "--random",
+    type=str,
+    default="False",
+    help="b matrix randomization True/False. Default is False.",
+)
 args_cli = parser.parse_args()
 
 lines = []
