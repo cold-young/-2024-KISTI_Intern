@@ -120,7 +120,9 @@ def visualize_matrix(A, b):
     plt.suptitle(f"Matrix Visualization: {args_cli.name}", fontsize=12)
 
     ##### PLOT 1 #####
-    cim = ax.matshow(A, cmap="viridis", vmin=-10, vmax=10)
+    # cim = ax.matshow(A, cmap="viridis", vmin=-10, vmax=10)
+    cim = ax.imshow(A, cmap="viridis", vmin=-10, vmax=10)
+    
     ax.text(
         0.5,
         -0.05,
@@ -156,8 +158,11 @@ def visualize_matrix(A, b):
         transform=bx.transAxes,
     )
 
-    cbx = bx.matshow(b, cmap="viridis", vmin=-10, vmax=10)
+    # cbx = bx.matshow(b, cmap="viridis", vmin=-10, vmax=10)
+    cbx = bx.imshow(b, cmap="viridis", vmin=-10, vmax=10, aspect='auto')
+    
     bx.xaxis.set_visible(False)
+    bx.set_xlim(0, 0.1) 
     if args_cli.number == "True":
         for (i, j), val in np.ndenumerate(b):
             if b[i, j] != 0:
@@ -172,8 +177,8 @@ def visualize_matrix(A, b):
                     weight="bold",
                 )
 
-    # plt.colorbar(cbx)
     plt.colorbar(cbx, cax=cax)
+    plt.tight_layout()
     plt.show()
 
 
