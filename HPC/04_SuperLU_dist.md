@@ -1,9 +1,6 @@
-# SuperLU-Dist(KOR.)
-**Date**: 2024.05.23 (Thur) <br>
+# Sparse Matrix Format (HB, CSR)
+**Date**: 2024.05.29 (Wed) <br>
 **Writer**: Chanyoung Ahn ([cold-young](https://github.com/cold-young))
-
-- KOR version 작성 후, ENG version 작성 예정.
-- Reference: [Nurion-guide](https://docs-ksc.gitbook.io/nurion-user-guide-eng)
 ___
 
 ## What is `Harwell-Boeing (HB)` format (`.rua / cua`)? 
@@ -43,18 +40,18 @@ ___
   - **PHSCRD** Number of data lines for right hand side vectors, starting guesses, and solutions: `4` (19-22 row: 4 lines)
 - **Line 3**: 
   - MATRIX TYPE: `RUA`(real, unsymmetric + square, assembled)
-  - number of rows or variable: `16` 
-  - number of columns or variable: `16`
-  - number of nonzero entires: `46` (the number of elements in 7-8 row)
-  - number of elemental matrix entries, "assembled":0 `0`
+  - Number of rows or variable: `16` 
+  - Number of columns or variable: `16`
+  - Number of nonzero entires: `46` (the number of elements in 7-8 row)
+  - Number of elemental matrix entries, "assembled":0 `0`
 - **Line 4**:
-  - (26I3): line break when write 26 element. each element has 3 space. (6 row) / the accumulate number of row nnz
-  - (26I3): line break when write 26 element. each element has 3 space. (7-8 row) / nnz colmn idx
-  - (5E15.8): line break when write 5 element. each element has 15 space. (9-18 row) / A matrix
-  - (5E15.8): line break when write 5 element. each element has 15 space. (19-22 row) / b matrix 
+  - (26I3): line break when write 26 element. Each element has 3 space. (6 row) / the accumulate number of row nnz
+  - (26I3): line break when write 26 element. Each element has 3 space. (7-8 row) / nnz colmn idx
+  - (5E15.8): line break when write 5 element. Each element has 15 space. (9-18 row) / A matrix
+  - (5E15.8): line break when write 5 element. Each element has 15 space. (19-22 row) / b matrix 
 
 - **Line 5** (PHSCRD>0):
-  - describes the right hand side information: `F`  우변 정보 (전체)
+  - describes the right hand side information: `F`  right side information
   - the number of right hand side: `1`
   - number of row indices: `0`
 
@@ -62,7 +59,10 @@ ___
 - 7-8 row: index data / 각 항목에 해당되는 행의 인덱스
 - 9-18 row: A matrix
 - 19-22 row: b matrix
-## Examples
+
+> All line length should be limited to 80 characters
+
+## Examples in SuperLU library
 
 ```shell
 cds # cd scratch/$USERID
@@ -117,5 +117,14 @@ pdgssvx(&options, &A, &ScalePermstruct, b, ldb, nrhs, &grid,
 - [**Reference**](https://portal.nersc.gov/project/sparse/superlu/superlu_dist_code_html/pdgssvx_8c.html)
 - `pdgssvx` solves a system of linear equations $A \times X = B$, by using Gaussian elimination with "static pivoting" to compute the LU factorization of A.
   
-<img src="../img/HPC_util_03.png" height=200>
+  <img src="../img/HPC_util_03.png" height=200>
 
+## CSR(Compressed Sparse Row) Format
+- **Reference:** [Link](https://gaussian37.github.io/math-la-sparse_matrix/)
+<br>
+
+- `Sparse Matrix`: A matrix has less non-zero element. (<>`dense matrix`) 
+- **CSR Format**:
+  - `Data`: an array containing non-zero elements
+  - `Rol`: an array containing column index of non-zero elements
+  - `Row`: an array containing the number of non-zero elements before *the nth* row (accumulated value)

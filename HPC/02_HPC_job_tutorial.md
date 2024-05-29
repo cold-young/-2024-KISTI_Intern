@@ -1,11 +1,20 @@
 # HPC Job Tutorials (KOR.)
-**Date**: 2024.05.21 (Tue) <br>
+**Date**: 2024.05.29 (Wed) <br>
 **Writer**: Chanyoung Ahn ([cold-young](https://github.com/cold-young))
 
 - KOR version 작성 후, ENG version 작성 예정.
 - Reference: [Nurion-guide](https://docs-ksc.gitbook.io/nurion-user-guide-eng)
 
 ## Submit Job 
+- Reference: [Link](https://docs-ksc.gitbook.io/nurion-user-guide/undefined/running-jobs-through-scheduler-pbs)
+
+```shell
+qsub -I -X -l select=1:ncpus=64:ompthreads=1 -l walltime=02:00:00 -q {큐 이름} -A {PBS 옵션 이름}
+```
+- `select`: The number of using nodes
+- `ncpus`: The number of using cores
+- `ompthreads`: The number of using threads 
+- `walltime`: runtime
 
 ### Common shell commands
 ```shell
@@ -17,6 +26,8 @@ qstat -u #view my jobs
 qstat -i -w -T -u [USER_ID]
 ```
 - `qstat -u support`error! why cannot see my jobs?
+
+### Submit NURION Interactive job
 
 ### Write job script 
 ```shell
