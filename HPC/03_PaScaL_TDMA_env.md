@@ -49,7 +49,7 @@ module list
 
 * We should submit any job and `interactive` alias in `scratch/USERID`.
 
-## Examples
+## SuperLU Example
 ```shell
 cds # cd scratch/$USERID
 cd ~/examples
@@ -71,4 +71,17 @@ mpirun -np 4 ./OUTFILENAME.out -r 2 -c 2 tdm 16_new.rua
 - `-np`: the number of processors  
 - `-r`: the number of processor grid row
 - `-c`: the number of processor grid column 
+
+
+## PaScaL_TDMA Example
+- Reference: [Docs](https://xccels.github.io/PaScaL_TDMA/)
+```shell
+cd examples
+mpirun -np 2 ./ex1_single.out
+
+cd ~/run
+mpirun -np 8 ./convection_3D.out ./PARA_INPUT.inp
+```
+
+
 ### [Makefile Tutorial](../C_lang/Makefile.md)

@@ -10,10 +10,28 @@
 
 ### 계산노드 
 1. **KNL (manycore) node**
-  - Intel Xeon Phi 7250 processor / 8,305 nodes  
-  - Intel Xeon Gold 6148 / 132 nodes
-2. SKL (CPU-only) node
-  - Intel Xeon Gold 6148 (Skylake)
+     1. **Processor**
+       - Intel Xeon Phi 7250 processor / 8,305 nodes  <br>
+       - Perfonrmance/CPU: 3.0464 TFLOPS <br>
+       - Core/CPU: 68 <br>
+       - Node/CPU: 1 <br>
+      
+     1. **Main Memory** <br>
+       - Memory/Node: 96 GB 
+  
+1. **SKL (CPU-only) node**
+  - Intel Xeon Gold 6148 (Skylake) / 132 nodes
+
+### Login node
+#### SSH
+```shell
+ssh -l <UserID> nurion.ksc.re.kr
+ssh -l <UserID> nurion.ksc.re.kr -p 22
+```
+
+#### MyKSC
+- https://my.ksc.re.kr
+- Add `ttyd(terminal)` app
 
 ### Send & Receive Files
 - FTP Client 
@@ -105,7 +123,8 @@ lfs quota -h /home01 # check file system disk
     #!/bin/sh
     #PBS -N IntelMPI_job
     #PBS -V
-    #PBS -q normal#PBS -A
+    #PBS -q normal
+    #PBS -A
     #PBS -l select=4:ncpus=64:mpiprocs=64
     #PBS -l walltime=04:00:00
 

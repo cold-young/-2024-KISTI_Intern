@@ -1,15 +1,14 @@
 # HPC Job Tutorials (KOR.)
-**Date**: 2024.05.29 (Wed) <br>
+**Date**: 2024.05.30 (Thur) <br>
 **Writer**: Chanyoung Ahn ([cold-young](https://github.com/cold-young))
 
-- KOR version 작성 후, ENG version 작성 예정.
 - Reference: [Nurion-guide](https://docs-ksc.gitbook.io/nurion-user-guide-eng)
 
 ## Submit Job 
 - Reference: [Link](https://docs-ksc.gitbook.io/nurion-user-guide/undefined/running-jobs-through-scheduler-pbs)
 
 ```shell
-qsub -I -X -l select=1:ncpus=64:ompthreads=1 -l walltime=02:00:00 -q {큐 이름} -A {PBS 옵션 이름}
+qsub -I -X -l select=1:ncpus=64:ompthreads=1 -l walltime=02:00:00 -q {QUEUE_NAME} -A {PBS OPTIONS}
 ```
 - `select`: The number of using nodes
 - `ncpus`: The number of using cores
@@ -36,6 +35,10 @@ cd job_examples
 
 mpiifort hello.f90 -o hello.x
 vim mpi.sh
+```
+- Compiler Option
+```shell
+-O3 -fPIC -xMIC-AVX512 #KNL Node Recommand
 ```
 
 - *mpi.sh*
