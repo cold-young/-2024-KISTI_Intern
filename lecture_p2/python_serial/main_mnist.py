@@ -28,16 +28,18 @@ data_sources = {
     "test_labels": "data/t10k-labels-idx1-ubyte",
 }
 
+
 def calculate_accuracy(dataset: dict, network: NN):
     correct = 0
-    
+
     for i in range(dataset["size"]):
         activations = neural_network_hypothesis(dataset["images"][i], network)
         predict = np.argmax(activations)
         if predict == dataset["labels"][i]:
             correct += 1
-    
+
     return correct / dataset["size"]
+
 
 def main():
     batch = None
@@ -68,9 +70,8 @@ def main():
         loss = neural_network_training_step(batch, network, gradient, 0.05)
         accuracy = calculate_accuracy(test_batch, network)
         size = batch["size"]
-        print(
-            f"Step {i} \t Average Loss: {loss / size} \t Accuracy: {accuracy}"
-        )
+        print(f"Step {i} \t Average Loss: {loss / size} \t Accuracy: {accuracy}")
+
 
 if __name__ == "__main__":
     try:

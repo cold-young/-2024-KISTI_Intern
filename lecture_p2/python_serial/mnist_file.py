@@ -42,8 +42,8 @@ def mnist_batch(dataset, size, number):
     if start_offset >= dataset["size"]:
         return 0
 
-    batch["images"] = dataset["images"][start_offset:start_offset+size]
-    batch["labels"] = dataset["labels"][start_offset:start_offset+size]
+    batch["images"] = dataset["images"][start_offset : start_offset + size]
+    batch["labels"] = dataset["labels"][start_offset : start_offset + size]
     batch["size"] = size
 
     # print(f"start_offset:{start_offset}, batch:", batch["size"], ", dataset_size:", dataset["size"])

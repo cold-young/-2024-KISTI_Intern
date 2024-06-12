@@ -5,6 +5,7 @@ MNIST_IMAGE_HEIGHT = 28
 MNIST_IMAGE_SIZE = MNIST_IMAGE_WIDTH * MNIST_IMAGE_HEIGHT
 MNIST_LABELS = 10
 
+
 class NN:
     def __init__(self):
         self.b = np.zeros(MNIST_LABELS, dtype=np.float32)
@@ -34,13 +35,14 @@ def neural_network_softmax(activations):
     e_activations = np.exp(activations - np.max(activations))
     return e_activations / e_activations.sum()
 
+
 def neural_network_hypothesis(image, network):
     activations = np.zeros(MNIST_LABELS, dtype=np.float32)
     for i in range(MNIST_LABELS):
         activations[i] = network.b[i]
         for j in range(MNIST_IMAGE_SIZE):
             activations[i] += network.W[i][j] * (image[i] / 255.0)
-    
+
     return neural_network_softmax(activations)
 
 
