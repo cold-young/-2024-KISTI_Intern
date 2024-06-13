@@ -42,14 +42,14 @@ def calculate_accuracy(dataset: dict, network: NN, ista: int, iend: int):
             correct += 1.0
 
     local_correct = np.array(correct / dataset["size"], dtype=np.float32)
-    
+
     comm = MPI.COMM_WORLD
     comm.Allreduce([local_correct, MPI.FLOAT], [total_correct, MPI.FLOAT], op=MPI.SUM)
-    return total_correct / comm.Get_size() 
+    return total_correct / comm.Get_size()
 
 
 def para_range(N: int, nproc: int, myrank: int):
-    iwork1 = N // nproc  
+    iwork1 = N // nproc
     iwork2 = N % nproc
     ista = myrank * iwork1 + min(myrank, iwork2)
     iend = ista + iwork1 - 1
@@ -82,7 +82,7 @@ def main():
 
     ista1, iend1 = para_range(BATCH_SIZE, nproc, myrank)
     ista2, iend2 = para_range(TEST_BATCH_SIZE, nproc, myrank)
-    
+
     np.random.seed(0)
     network.neural_network_random_weights()
 
@@ -92,7 +92,7 @@ def main():
         test_batch = mnist_batch(
             test_dataset, TEST_BATCH_SIZE, iend2 - ista2 + 1, i % test_batches
         )
-        
+
         loss = neural_network_training_step(
             batch, network, gradient, 0.05, ista1, iend1, BATCH_SIZE
         )

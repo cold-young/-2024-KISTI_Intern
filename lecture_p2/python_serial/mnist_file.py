@@ -7,8 +7,8 @@ current_directory = os.path.dirname(os.path.abspath(__file__))
 def mnist_get_dataset(images_path, labels_path):
     """
     Description: get dataset from files
-    INPUT: dataset paths 
-    OUTPUT: 
+    INPUT: dataset paths
+    OUTPUT:
         dataset: dict
             dataset.size
             dataset.label
