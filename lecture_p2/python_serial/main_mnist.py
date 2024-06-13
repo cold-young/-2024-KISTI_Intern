@@ -70,7 +70,11 @@ def main():
         loss = neural_network_training_step(batch, network, gradient, 0.05)
         accuracy = calculate_accuracy(test_batch, network)
         size = batch["size"]
-        print(f"Step {i} \t Average Loss: {loss / size} \t Accuracy: {accuracy}")
+        # print(f"Step {i} \t Average Loss: {loss / size} \t Accuracy: {accuracy}")
+        result = "Step: {0:3}  Average Loss: {1:10} \t Accuracy: {2:3}".format(
+            i, loss / size, accuracy
+        )
+        print(result)
 
 
 if __name__ == "__main__":
