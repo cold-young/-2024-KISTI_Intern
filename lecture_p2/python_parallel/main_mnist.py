@@ -1,9 +1,9 @@
 # MNIST Classification
 # Chanyoung Ahn (https://github.com/cold-young)
-# 24.06.10
+# 24.06.13
 
 # Command Example:
-# $ python
+# $ mpirun -np 4 python main_mnist.py
 
 import numpy as np
 import matplotlib.pyplot as plt
