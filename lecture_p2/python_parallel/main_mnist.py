@@ -16,7 +16,7 @@ from neural_network import (
 )
 from mpi4py import MPI
 
-STEPS = 1000
+STEPS = 500
 BATCH_SIZE = 400
 TEST_BATCH_SIZE = 100
 
@@ -44,6 +44,7 @@ def calculate_accuracy(dataset: dict, network: NN, ista: int, iend: int):
     local_correct = np.array(correct / dataset["size"], dtype=np.float32)
 
     comm = MPI.COMM_WORLD
+
     comm.Allreduce([local_correct, MPI.FLOAT], [total_correct, MPI.FLOAT], op=MPI.SUM)
     return total_correct / comm.Get_size()
 

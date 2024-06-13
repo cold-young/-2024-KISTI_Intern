@@ -18,7 +18,8 @@ from neural_network import (
 )
 
 STEPS = 500
-BATCH_SIZE = 100
+BATCH_SIZE = 400
+TEST_BATCH_SIZE = 100
 
 # Dataset
 # Downloaded from: http://yann.lecun.com/exdb/mnist/
@@ -60,12 +61,12 @@ def main():
 
     network.neural_network_random_weights()
     batches = train_dataset["size"] / BATCH_SIZE
-    test_batches = test_dataset["size"] / 50
+    test_batches = test_dataset["size"] / TEST_BATCH_SIZE
 
     for i in range(STEPS):
         # Initialize a new batch
         batch = mnist_batch(train_dataset, BATCH_SIZE, i % batches)
-        test_batch = mnist_batch(test_dataset, 50, i % test_batches)
+        test_batch = mnist_batch(test_dataset, TEST_BATCH_SIZE, i % test_batches)
 
         # Run one step of gradient descent and calculate the loss
         loss = neural_network_training_step(batch, network, gradient, 0.05)

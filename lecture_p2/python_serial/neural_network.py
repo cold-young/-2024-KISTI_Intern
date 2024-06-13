@@ -12,6 +12,7 @@ class NN:
         self.W = np.zeros((MNIST_LABELS, MNIST_IMAGE_SIZE), dtype=np.float32)
 
     def neural_network_random_weights(self):
+        np.random.seed(0)
         self.b = np.random.rand(MNIST_LABELS).astype(np.float32)
         self.W = np.random.rand(MNIST_LABELS, MNIST_IMAGE_SIZE).astype(np.float32)
 
