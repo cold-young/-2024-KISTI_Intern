@@ -41,7 +41,7 @@ def mnist_batch(dataset, total_size, number):
     """
     total_size = total size of batch (BATCH_SIZE)
     size = size of each processor (iend1 - ista1 +1)
-    number = i % batches 
+    number = i % batches
     """
     batch = {}
 

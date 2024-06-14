@@ -37,7 +37,7 @@ def calculate_accuracy(dataset: dict, network: NN):
         predict = np.argmax(activations)
         if predict == dataset["labels"][i]:
             correct += 1
-            
+
     return correct / dataset["size"]
 
 

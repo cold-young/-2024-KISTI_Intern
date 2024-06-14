@@ -22,6 +22,7 @@ class NN_Grad:
         self.b_grad = np.zeros(MNIST_LABELS, dtype=np.float32)
         self.W_grad = np.zeros((MNIST_LABELS, MNIST_IMAGE_SIZE), dtype=np.float32)
 
+
 # Calculate the softmax vector from the activations. This uses a more
 # numerically stable algorithm that normalises the activations to prevent large exponents.
 def neural_network_softmax(activations):
@@ -43,9 +44,7 @@ def neural_network_gradient_update(image, network: NN, gradient: NN_Grad, label)
     return -math.log(activations[label])
 
 
-def neural_network_training_step(
-    dataset: dict, network: NN, learning_rate: float
-):
+def neural_network_training_step(dataset: dict, network: NN, learning_rate: float):
     total_loss = 0.0
 
     # Initialize gradient

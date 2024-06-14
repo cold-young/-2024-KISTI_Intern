@@ -32,15 +32,16 @@ data_sources = {
 def calculate_accuracy(dataset: dict, network: NN, ista: int, iend: int):
     correct = np.array(0.0, dtype=np.float32)
     total_correct = np.array(0.0, dtype=np.float32)
-    for i in range(ista, iend+1):
+    for i in range(ista, iend + 1):
         activations = neural_network_hypothesis(dataset["images"][i], network)
         predict = np.argmax(activations)
         if predict == dataset["labels"][i]:
             correct += 1.0
-            
+
     comm = MPI.COMM_WORLD
     comm.Allreduce([correct, MPI.FLOAT], [total_correct, MPI.FLOAT], op=MPI.SUM)
     return total_correct / dataset["size"]
+
 
 def para_range(N: int, nproc: int, myrank: int):
     iwork1 = N // nproc
@@ -69,10 +70,10 @@ def main():
     test_dataset = mnist_get_dataset(
         data_sources["test_images"], data_sources["test_labels"]
     )
-    
+
     # Calculate how many batches (so we know when to wrap around)
-    batches = train_dataset["size"] / BATCH_SIZE 
-    
+    batches = train_dataset["size"] / BATCH_SIZE
+
     ista1, iend1 = para_range(BATCH_SIZE, nproc, myrank)
     ista2, iend2 = para_range(test_dataset["size"], nproc, myrank)
 
@@ -80,7 +81,7 @@ def main():
 
     for i in range(STEPS):
         # Initialize a new batch
-        batch = mnist_batch(train_dataset, BATCH_SIZE, i % batches) 
+        batch = mnist_batch(train_dataset, BATCH_SIZE, i % batches)
         loss = neural_network_training_step(
             batch, network, 0.05, ista1, iend1, BATCH_SIZE
         )

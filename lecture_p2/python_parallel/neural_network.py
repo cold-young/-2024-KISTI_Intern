@@ -23,6 +23,7 @@ class NN_Grad:
         self.b_grad = np.zeros(MNIST_LABELS, dtype=np.float32)
         self.W_grad = np.zeros((MNIST_LABELS, MNIST_IMAGE_SIZE), dtype=np.float32)
 
+
 # Calculate the softmax vector from the activations. This uses a more
 # numerically stable algorithm that normalises the activations to prevent large exponents.
 def neural_network_softmax(activations):
