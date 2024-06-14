@@ -18,7 +18,6 @@ from mpi4py import MPI
 
 STEPS = 500
 BATCH_SIZE = 400
-TEST_BATCH_SIZE = 100
 
 # Dataset
 # Downloaded from: http://yann.lecun.com/exdb/mnist/
@@ -33,21 +32,15 @@ data_sources = {
 def calculate_accuracy(dataset: dict, network: NN, ista: int, iend: int):
     correct = np.array(0.0, dtype=np.float32)
     total_correct = np.array(0.0, dtype=np.float32)
-
-    for i in range(iend - ista + 1):
+    for i in range(ista, iend+1):
         activations = neural_network_hypothesis(dataset["images"][i], network)
-
         predict = np.argmax(activations)
         if predict == dataset["labels"][i]:
             correct += 1.0
-
-    local_correct = np.array(correct / dataset["size"], dtype=np.float32)
-
+            
     comm = MPI.COMM_WORLD
-
-    comm.Allreduce([local_correct, MPI.FLOAT], [total_correct, MPI.FLOAT], op=MPI.SUM)
-    return total_correct / comm.Get_size()
-
+    comm.Allreduce([correct, MPI.FLOAT], [total_correct, MPI.FLOAT], op=MPI.SUM)
+    return total_correct / dataset["size"]
 
 def para_range(N: int, nproc: int, myrank: int):
     iwork1 = N // nproc
@@ -60,9 +53,8 @@ def para_range(N: int, nproc: int, myrank: int):
 
 
 def main():
-    batch = None
+    np.random.seed(0)
     network = NN()
-    gradient = NN_Grad()
     loss, accuracy = float, float
 
     # MPI Initialize
@@ -77,27 +69,22 @@ def main():
     test_dataset = mnist_get_dataset(
         data_sources["test_images"], data_sources["test_labels"]
     )
-
-    batches = train_dataset["size"] / BATCH_SIZE
-    test_batches = test_dataset["size"] / TEST_BATCH_SIZE
-
+    
+    # Calculate how many batches (so we know when to wrap around)
+    batches = train_dataset["size"] / BATCH_SIZE 
+    
     ista1, iend1 = para_range(BATCH_SIZE, nproc, myrank)
-    ista2, iend2 = para_range(TEST_BATCH_SIZE, nproc, myrank)
+    ista2, iend2 = para_range(test_dataset["size"], nproc, myrank)
 
-    np.random.seed(0)
     network.neural_network_random_weights()
 
     for i in range(STEPS):
         # Initialize a new batch
-        batch = mnist_batch(train_dataset, BATCH_SIZE, iend1 - ista1 + 1, i % batches)
-        test_batch = mnist_batch(
-            test_dataset, TEST_BATCH_SIZE, iend2 - ista2 + 1, i % test_batches
-        )
-
+        batch = mnist_batch(train_dataset, BATCH_SIZE, i % batches) 
         loss = neural_network_training_step(
-            batch, network, gradient, 0.05, ista1, iend1, BATCH_SIZE
+            batch, network, 0.05, ista1, iend1, BATCH_SIZE
         )
-        accuracy = calculate_accuracy(test_batch, network, ista2, iend2)
+        accuracy = calculate_accuracy(test_dataset, network, ista2, iend2)
 
         if myrank == 0:
             result = "Step: {0:3}  Average Loss: {1:2.3f} \t Accuracy: {2:3.3f}".format(

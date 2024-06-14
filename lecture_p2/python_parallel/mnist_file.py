@@ -37,16 +37,21 @@ def mnist_get_dataset(images_path, labels_path):
 
 
 # Fills the batch dataset with a subset of the parent dataset
-def mnist_batch(dataset, total_size, size, number):
+def mnist_batch(dataset, total_size, number):
+    """
+    total_size = total size of batch (BATCH_SIZE)
+    size = size of each processor (iend1 - ista1 +1)
+    number = i % batches 
+    """
     batch = {}
 
     start_offset = int(total_size * number)
     if start_offset >= dataset["size"]:
         return 0
 
-    batch["images"] = dataset["images"][start_offset : start_offset + size]
-    batch["labels"] = dataset["labels"][start_offset : start_offset + size]
-    batch["size"] = size
+    batch["images"] = dataset["images"][start_offset : start_offset + total_size]
+    batch["labels"] = dataset["labels"][start_offset : start_offset + total_size]
+    batch["size"] = total_size
 
     if start_offset + batch["size"] > dataset["size"]:
         batch["size"] = dataset["size"] - start_offset

@@ -19,7 +19,6 @@ from neural_network import (
 
 STEPS = 500
 BATCH_SIZE = 400
-TEST_BATCH_SIZE = 100
 
 # Dataset
 # Downloaded from: http://yann.lecun.com/exdb/mnist/
@@ -33,20 +32,18 @@ data_sources = {
 
 def calculate_accuracy(dataset: dict, network: NN):
     correct = 0
-
     for i in range(dataset["size"]):
         activations = neural_network_hypothesis(dataset["images"][i], network)
         predict = np.argmax(activations)
         if predict == dataset["labels"][i]:
             correct += 1
-
+            
     return correct / dataset["size"]
 
 
 def main():
-    batch = None
+    np.random.seed(0)
     network = NN()
-    gradient = NN_Grad()
     loss, accuracy = float, float
 
     # # Read the dataset from the ./data directory
@@ -61,19 +58,16 @@ def main():
 
     network.neural_network_random_weights()
     batches = train_dataset["size"] / BATCH_SIZE
-    test_batches = test_dataset["size"] / TEST_BATCH_SIZE
 
     for i in range(STEPS):
         # Initialize a new batch
         batch = mnist_batch(train_dataset, BATCH_SIZE, i % batches)
-        test_batch = mnist_batch(test_dataset, TEST_BATCH_SIZE, i % test_batches)
 
         # Run one step of gradient descent and calculate the loss
-        loss = neural_network_training_step(batch, network, gradient, 0.05)
-        accuracy = calculate_accuracy(test_batch, network)
+        loss = neural_network_training_step(batch, network, 0.05)
+        accuracy = calculate_accuracy(test_dataset, network)
         size = batch["size"]
-        # print(f"Step {i} \t Average Loss: {loss / size} \t Accuracy: {accuracy}")
-        result = "Step: {0:3}  Average Loss: {1:10} \t Accuracy: {2:3}".format(
+        result = "Step: {0:3}  Average Loss: {1:2.3f} \t Accuracy: {2:3.3f}".format(
             i, loss / size, accuracy
         )
         print(result)
