@@ -1,5 +1,6 @@
 import numpy as np
 import math
+import pickle
 
 MNIST_IMAGE_WIDTH = 28
 MNIST_IMAGE_HEIGHT = 28
@@ -62,3 +63,8 @@ def neural_network_training_step(dataset: dict, network: NN, learning_rate: floa
         network.b[i] -= learning_rate * gradient.b_grad[i] / dataset["size"]
         network.W[i] -= learning_rate * gradient.W_grad[i] / dataset["size"]
     return total_loss
+
+
+def save_network(network: NN, filename: str):
+    with open(filename, "wb") as f:
+        pickle.dump(network, f)

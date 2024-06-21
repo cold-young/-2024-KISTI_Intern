@@ -1,6 +1,7 @@
 import numpy as np
 from mpi4py import MPI
 import math
+import pickle
 
 MNIST_IMAGE_WIDTH = 28
 MNIST_IMAGE_HEIGHT = 28
@@ -75,3 +76,8 @@ def neural_network_training_step(
         network.b[i] -= learning_rate * gradient.b_grad[i] / float(total_size)
         network.W[i] -= learning_rate * gradient.W_grad[i] / float(total_size)
     return total_loss
+
+
+def save_network(network: NN, filename: str):
+    with open(filename, "wb") as f:
+        pickle.dump(network, f)

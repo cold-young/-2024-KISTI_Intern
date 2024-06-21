@@ -13,6 +13,7 @@ from neural_network import (
     NN_Grad,
     neural_network_training_step,
     neural_network_hypothesis,
+    save_network,
 )
 from mpi4py import MPI
 
@@ -92,6 +93,9 @@ def main():
                 i, loss / BATCH_SIZE, accuracy
             )
             print(result)
+
+    if myrank == 0:
+        save_network(network, "./parallel_model.pkl")
 
 
 if __name__ == "__main__":

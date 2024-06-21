@@ -19,10 +19,10 @@ qsub -I -X -l select=1:ncpus=64:ompthreads=1 -l walltime=02:00:00 -q {QUEUE_NAME
 ```shell
 motd # See basic notice and help
 pbs_status # watch all nodes status 
-pbs_queue_check # watch available nodes
 
 qstat -u #view my jobs
 qstat -i -w -T -u [USER_ID]
+qstat -xf {JOBNUMBER}.pbs # view log 
 ```
 - `qstat -u support`error! why cannot see my jobs?
 

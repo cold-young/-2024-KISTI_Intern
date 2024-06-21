@@ -30,6 +30,7 @@ ___
     cd ~/python_parallel
     mpirun -np 4 python main_mnist.py 
    ```
+    - Test your traied model at `test_model.ipynb` using *jupyter_notebook*.
 
 ## Directory Layout
 ```text
@@ -55,4 +56,5 @@ ___
 ```
 - `python_parallel`: Classification NN w/ MPI 
 - `python_serial`: Classification NN w/o MPI 
-- `python_serial_2`: Classficiation NN + hidden layer .. 
+- `python_serial_DNN`: Classficiation NN w/o MPI + hidden layer .. 
+- `python_parallel_DNN`: Classficiation NN w/ MPI + hidden layer .. 

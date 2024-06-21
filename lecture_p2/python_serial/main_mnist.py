@@ -15,6 +15,7 @@ from neural_network import (
     neural_network_training_step,
     neural_network_hypothesis,
     MNIST_LABELS,
+    save_network,
 )
 
 STEPS = 500
@@ -71,6 +72,7 @@ def main():
             i, loss / size, accuracy
         )
         print(result)
+    save_network(network, "./serial_model.pkl")
 
 
 if __name__ == "__main__":
