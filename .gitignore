@@ -14,7 +14,7 @@
 .history
 
 # develop
-**/develop/
+**/_develop/
 **/*.rua
 **/*.csv
 **/*.pkl
