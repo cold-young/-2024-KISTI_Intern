@@ -14,7 +14,6 @@ nurion_n1 = [
     28.909206,
     20.021185,
     16.393102,
-    16.801963,
 ]
 nurion_best = [
     194.061681,
@@ -39,7 +38,7 @@ x = [1, 2, 4, 8, 16, 32, 64]
 x_best = [1, 2, 4, 8, 16, 32]
 
 ax.plot(
-    x,
+    x_best,
     nurion_n1,
     "^--",
     color="blue",
@@ -59,7 +58,7 @@ plt.tick_params(axis="y", direction="in", which="both")
 plt.tick_params(axis="x", direction="in", which="both")
 plt.tick_params(axis="x", which="minor", length=0)
 
-plt.xlim(2**-1, 2**7)
+plt.xlim(2**-1, 2**6)
 plt.ylim(10**0, 10**3)
 
 plt.yscale("log")
