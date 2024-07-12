@@ -217,6 +217,6 @@ ax.set_xticks(r_128)
 ax.get_xaxis().set_major_formatter(mpl.ticker.ScalarFormatter())
 
 plt.ylabel("Wall-clock time (sec)")
-plt.xlabel("Number of cores")
+plt.xlabel("r")
 plt.legend(loc="upper right", fontsize="12", frameon=False, labelspacing=0.01)
 plt.show()
